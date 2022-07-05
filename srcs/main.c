@@ -4,6 +4,9 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <termios.h>
+#include "pipex_bonus.h"
+#include "libft.h"
 //ctrl_c 시그널 핸들링
 void	sig_handler(int signum)
 {
@@ -36,16 +39,25 @@ char	*ft_prompt(void)
 	}
 }
 
-int	main(void)
+int	main(int ac, char **av, char **enpv)
 {
 	char	*line;
+	struct termios termios;
 
+	(void)ac;
+	(void)av;
+    tcgetattr(STDIN_FILENO, &termios);
+    termios.c_lflag &= ~ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSANOW, &termios);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		line = ft_prompt();
-		printf("%s\n", line);
+	//	line = ft_add_space(line, '>');
+	//	line = ft_add_space(line, '<');
+		ft_pipe(line, enpv);
+		signal(SIGINT, sig_handler);
 		free(line);
 	}
 }

@@ -1,4 +1,5 @@
-CFLAGS = -Wall -Wextra -Werror
+
+CFLAGS = -Wall -Wextra -Werror -Iincludes -g3 -fsanitize=address
 CC = cc
 
 # brew info readline
@@ -14,23 +15,33 @@ READLINE_INC	= -I /Users/$(USER)/.brew/opt/readline/include
 # READLINE_LIB	= -lreadline -L/opt/homebrew/opt/readline/lib
 # READLINE_INC	= -I/opt/homebrew/opt/readline/include
 
-SRCS = main.c
+SRCS = srcs/main.c srcs/ft_cmd.c srcs/ft_parsing.c srcs/ft_error_check.c \
+	   srcs/ft_pipe_utils.c srcs/ft_pipe.c srcs/ft_dire_file.c srcs/ft_utils.c \
+	   srcs/ft_echo.c
+
+LIBFT = libft.a
+
 NAME = minishell
 
 OBJS = $(SRCS:.c=.o)
 
 all:  $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(READLINE_INC) $(READLINE_LIB)
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(READLINE_INC) $(READLINE_LIB)
+
+$(LIBFT):
+	@make -C ./libft
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(READLINE_INC) -c $< -o $@
 
 clean:
+	@make clean -C libft/
 	@rm -rf $(OBJS)
 
 fclean: clean
+	@make fclean -C libft/
 	@rm -rf $(NAME) $(OBJS)
 
 re: fclean all
