@@ -18,6 +18,17 @@ void	sig_handler(int signum)
 	rl_replace_line("", 1);
 	rl_redisplay();
 }
+void	dfl_handler(int sigquit)
+{
+	write(1,"111",3);
+	if (sigquit != SIGQUIT)
+		return ;
+	write(STDOUT_FILENO, "^\\Quit: 3\n", 10);
+	if (rl_on_new_line() == -1)
+		exit(1);
+	rl_replace_line("", 1);
+	rl_redisplay();
+}
 //return : 입력한 명령어 한줄
 //prompt 출력
 char	*ft_prompt(void)
@@ -43,21 +54,40 @@ int	main(int ac, char **av, char **enpv)
 {
 	char	*line;
 	struct termios termios;
+	int	exit_code;
 
 	(void)ac;
 	(void)av;
     tcgetattr(STDIN_FILENO, &termios);
     termios.c_lflag &= ~ECHOCTL;
     tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+    exit_code = 0;
 	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		line = ft_prompt();
-	//	line = ft_add_space(line, '>');
-	//	line = ft_add_space(line, '<');
-		ft_pipe(line, enpv);
+		if (ft_taptosp(line))
+		{
+			signal(SIGQUIT, SIG_DFL);
+			signal(SIGINT, sig_handler);
+			free(line);
+			continue ;
+		}
+		exit_code = ft_syntax_check(line);
+		if (exit_code)
+		{
+			printf("\n%d\n", exit_code);
+			signal(SIGQUIT, SIG_DFL);
+		}
+		else
+		{
+			line = ft_add_space(line, '>');
+			line = ft_add_space(line, '<');
+			exit_code = ft_pipe(line, enpv);
+		}
 		signal(SIGINT, sig_handler);
 		free(line);
+//		system("leaks minishell");
 	}
 }

@@ -14,7 +14,7 @@ void	ft_print_echo(t_pipex *val, int i, int k, int check)
 		write(1, "\n", 1);
 }
 
-void	ft_echo(t_pipex *val, int i)
+void	*ft_echo(t_pipex *val, int i)
 {
 	int	check;
 	int	k;
@@ -32,13 +32,13 @@ void	ft_echo(t_pipex *val, int i)
 		ft_print_echo(val, i, k, check);
 		break ;
 	}
-	exit(0);
+	return (0);
 }
 
-void	ft_pwd(void)
+void	*ft_pwd(void)
 {
 	char	buf[1024];
 	getcwd(buf, 1024);
 	printf("%s\n", buf);
-	exit(0);
+	return (0);
 }

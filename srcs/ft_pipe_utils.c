@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:22 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/01 20:47:17 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/06 15:32:49 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,52 +92,56 @@ void	ft_close_fd(pid_t pid, t_pipex *val, int i)
 		ft_close_fd2(val, i, end_temp);
 }
 
-static void	ft_pipex2(pid_t pid, t_input *input, t_pipex *val, int i)
+static int	ft_pipex2(pid_t pid, t_input *input, t_pipex *val, int i)
 {
+	int	st;
+	int	k;
+
+	if (pid == 0)
+		signal(SIGQUIT, SIG_DFL);
+	if (input->ac != 1)
+		ft_close_fd(pid, val, i);
 	if (pid == 0 && i == 0)
 		ft_cmd_start(i, val, input);
 	else if (pid == 0 && i == val->end)
 		ft_cmd_end(i, val, input);
 	else if (pid == 0)
 		ft_cmd_mid1(i, val, input);
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, &st, 0);
+	k = 0;
+	while (k < val->end)
+	{
+		waitpid(0, NULL, 0);
+		k++;
+	}
+	return (st >> 8 & 0x000000ff);
 }
 
 int	ft_pipex(int ac, t_input *input, t_pipex *val)
 {
-	pid_t	pid1;
-	pid_t	*pid;
+	pid_t	pid;
 	int		i;
-	int		st;
 
 	i = 0;
-	pid = (pid_t *)malloc(sizeof(pid) * ac);
-	while (ac > 0)
+	if (ac == 1 && ft_built_check(val->cmd[0][0]))
+		return (ft_cmd_parent(i, val, input));
+	else
 	{
-		ac--;
-		pid1 = fork();
-		if (pid1 != 0)
-			pid[i] = pid1;
-		if (pid1 == -1)
+		while (ac > 0)
 		{
-			perror("fork error ");
-			exit(1);
+			ac--;
+			pid = fork();
+			if (pid == -1)
+			{
+				perror("fork error ");
+				exit(1);
+			}
+			if (pid == 0)
+				break ;
+			i++;
 		}
-		if (pid1 == 0)
-			break ;
-		i++;
 	}
-	if (input->ac != 1)
-		ft_close_fd(pid1, val, i);
-	ft_pipex2(pid1, input, val, i);
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid1, &st, 0);
-	i = 0;
-	while (i < val->end)
-	{
-		waitpid(0, NULL, 0);
-		i++;
-	}
-	if (val->check == 1)
-		unlink(".temp");
-	return (st >> 8 & 0x000000ff);
+	ft_pipex2(pid, input, val, i);
+	return (0);
 }

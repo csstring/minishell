@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:16 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/04 15:50:39 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/08 20:06:25 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	ft_access_check2(char *cmd, t_pipex *val, int check, int i)
 	char	*str;
 	struct stat	buf;
 
-	memset(&buf, 0, sizeof(buf));//ft_memset으로 바꾸기
+	ft_memset(&buf, 0, sizeof(buf));
 	stat(cmd, &buf);
 	if (buf.st_mode & S_IXUSR && buf.st_mode & S_IFREG)
 	{
@@ -69,23 +69,19 @@ void	ft_sep_temp(t_pipex *val, int i)
 	int	k;
 	int	in;
 	int	out;
-//	int	doc;
 	int	etc;
 
 	k = 0;
 	val->indirec[i] = (char **)malloc(sizeof(char *) * (ft_direc_count(val->temp[i], "<") * 2 + 1));
 	val->outdirec[i] = (char **)malloc(sizeof(char *) * (ft_direc_count(val->temp[i], ">") * 2 + 1));
-//	val->here_doc[i] = (char **)malloc(sizeof(char *) * (ft_direc_count(val->temp[i], "<<") * 2 + 1));
 	while (val->temp[i][k])
 		k++;
 	val->cmd[i] = (char **)malloc(sizeof(char *) * (k + 1));
 	val->indirec[i][ft_direc_count(val->temp[i], "<")*2] = NULL;
 	val->outdirec[i][ft_direc_count(val->temp[i], ">")*2] = NULL;
-//	val->here_doc[i][ft_direc_count(val->temp[i], "<<")*2] = NULL;
 	k = 0;
 	in = 0;
 	out = 0;
-//	doc = 0;
 	etc = 0;
 	while (val->temp[i][k])
 	{
@@ -116,6 +112,7 @@ void	ft_av_parsing(t_input *input, t_pipex *val)
 {
 	int	ac_temp;
 	int	i;
+	char	*temp;
 
 	i = 0;
 	ac_temp = input->ac;
@@ -125,7 +122,9 @@ void	ft_av_parsing(t_input *input, t_pipex *val)
 				ft_strncmp(input->av[i + val->check], "sed ", 4) == 0)
 		{
 			val -> temp[i] = ft_split(input->av[i], '\'');
-			val -> temp[i][0] = ft_strtrim(val -> temp[i][0], " ");
+			temp = val->temp[i][0];
+			val -> temp[i][0] = ft_strtrim(temp, " ");
+			free(temp);
 			ft_sep_temp(val, i);
 		}
 		else

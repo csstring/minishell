@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 12:09:13 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/05 17:55:59 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/08 15:31:38 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ typedef struct s_pipex
 	char	**ev;
 	char	***indirec;
 	char	***outdirec;
-	char	***here_doc;
 	char	***temp;
 	char	***cmd;
 	char	**exe_path;
@@ -55,6 +54,7 @@ typedef struct s_input
 void	ft_cmd_end(int i, t_pipex *val, t_input *input);
 void	ft_cmd_mid1(int i, t_pipex *val, t_input *input);
 void	ft_cmd_start(int i, t_pipex *val, t_input *input);
+int		ft_cmd_parent(int i, t_pipex *val, t_input *input);
 //ft_error_check
 void	ft_error_check(int i, t_input *input, t_pipex *val);
 //ft_parsing
@@ -68,14 +68,25 @@ int		ft_pipex(int ac, t_input *input, t_pipex *val);
 //main
 void	ft_init(t_pipex *val, t_input *input);
 int		ft_pipe(char *line, char **enpv);
+void	dfl_handler(int sigquit);
 //etc
 int		ft_dire_in(char **cmd);
 int		ft_dire_out(char **outdirec);
 void	ft_error_print(char *str, int no);
 char	*ft_add_space(char *src, char c);
 int		ft_direc_count(char **str, char *c);
+void	ft_tolower_str(char *str);
+int		ft_built_check(char *str);
+int		ft_taptosp(char *line);
+//syntax
+int		ft_pass_quot(char *line, int i);
+int		ft_syntax_check(char *line);
+//free
+void	ft_free2(void **temp);
+void	ft_free3(void ***temp);
+void	ft_pipe_clear(t_pipex *val, t_input *input);
 //echo,pwd
 void	ft_print_echo(t_pipex *val, int i, int k, int check);
-void	ft_echo(t_pipex *val, int i);
-void	ft_pwd(void);
+void	*ft_echo(t_pipex *val, int i);
+void	*ft_pwd(void);
 #endif
