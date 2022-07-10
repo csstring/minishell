@@ -1,5 +1,5 @@
 
-CFLAGS = -Wall -Wextra -Werror -Iincludes -g3
+CFLAGS = -Wall -Wextra -Werror -Iincludes -g -fsanitize=address
 CC = cc
 
 # brew info readline
@@ -17,7 +17,7 @@ READLINE_INC	= -I /Users/$(USER)/.brew/opt/readline/include
 
 SRCS = srcs/main.c srcs/ft_cmd.c srcs/ft_parsing.c srcs/ft_error_check.c \
 	   srcs/ft_pipe_utils.c srcs/ft_pipe.c srcs/ft_dire_file.c srcs/ft_utils.c \
-	   srcs/ft_echo.c srcs/ft_free.c srcs/ft_syntax.c
+	   srcs/ft_echo.c srcs/ft_free.c srcs/ft_syntax.c srcs/ft_trans_quot.c
 
 LIBFT = libft.a
 

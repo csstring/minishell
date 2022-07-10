@@ -67,6 +67,14 @@ int	main(int ac, char **av, char **enpv)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		line = ft_prompt();
+		exit_code = ft_syntax_check(line);
+		if (exit_code)
+		{
+			signal(SIGQUIT, SIG_DFL);
+			signal(SIGINT, sig_handler);
+			free(line);
+			continue ;
+		}
 		if (ft_taptosp(line))
 		{
 			signal(SIGQUIT, SIG_DFL);
@@ -74,7 +82,7 @@ int	main(int ac, char **av, char **enpv)
 			free(line);
 			continue ;
 		}
-		exit_code = ft_syntax_check(line);
+		//"",'', $처리
 		if (exit_code)
 		{
 			printf("\n%d\n", exit_code);

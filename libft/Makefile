@@ -6,12 +6,12 @@
 #    By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/20 17:04:36 by schoe             #+#    #+#              #
-#    Updated: 2022/07/06 20:39:45 by schoe            ###   ########.fr        #
+#    Updated: 2022/07/10 14:56:51 by schoe            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 	   ft_isdigit.c ft_isprint.c ft_itoa.c ft_memchr.c ft_memcmp.c ft_memcpy.c \
        ft_memmove.c ft_memset.c ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
@@ -21,7 +21,8 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
        ft_tolower.c ft_toupper.c ft_lstadd_back.c ft_lstadd_front.c \
        ft_lstclear.c ft_lstdelone.c ft_lstiter.c ft_lstlast.c ft_lstmap.c \
        ft_lstnew.c ft_lstsize.c ft_ultoa.c ft_printf.c ft_printf_utils.c \
-       ft_u_convert_base.c get_next_line.c ft_eprintf.c ft_eprintf_utils.c 
+       ft_u_convert_base.c get_next_line.c ft_eprintf.c ft_eprintf_utils.c \
+       ft_strndup.c
 OBJS = ${SRCS:.c=.o}
 RM = rm -f
 INCLUDE = -I../includes

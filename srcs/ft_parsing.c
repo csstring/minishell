@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:16 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/08 20:06:25 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/10 15:30:46 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ void	ft_sep_temp(t_pipex *val, int i)
 			else
 				val->outdirec[i][out++] = ">";
 			val->outdirec[i][out++] = val->temp[i][k];
+		}
+		else if (val->temp[i][k][0] == '(')
+		{
+			val->cmd[i][etc++] = ft_re_trans_quot(val->line, val->temp[i][k][1]);
+			free(val->temp[i][k]);
 		}
 		else
 			val->cmd[i][etc++] = val->temp[i][k];

@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 12:09:13 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/08 15:31:38 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/10 14:51:43 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_pipex
 	char	***cmd;
 	char	**exe_path;
 	char	*line;
+	char	***trans;
 	int		**fd;
 	int		end;
 	int		check;
@@ -89,4 +90,7 @@ void	ft_pipe_clear(t_pipex *val, t_input *input);
 void	ft_print_echo(t_pipex *val, int i, int k, int check);
 void	*ft_echo(t_pipex *val, int i);
 void	*ft_pwd(void);
+//trans_quot
+char	*ft_trans_quot(char *line);
+char	*ft_re_trans_quot(char *line, int index);
 #endif

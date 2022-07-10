@@ -1,7 +1,7 @@
 #include "pipex_bonus.h"
 static int	ft_print_syntax(char *str, int exit_code)
 {
-	printf("ss_shell: syntax error: near unexpected token '%s'", str);
+	printf("ss_shell: syntax error: near unexpected token '%s'\n", str);
 	return (exit_code);
 }
 
@@ -12,14 +12,14 @@ int	ft_pass_quot(char *line, int i)
 		{
 			i++;
 			if (line[i] == '\'')
-				return (i + 1);
+				return (i);
 		}
 	else
 		while (line[i])
 		{
 			i++;
 			if (line[i] == '\"')
-				return (i + 1);
+				return (i);
 		}
 	return (-1);
 }
@@ -80,7 +80,7 @@ static int ft_blank_check(char *line, char *c)
 {
 	char	**str;
 	int		i;
-(void)c;
+
 	i = 0;
 	str = ft_split(line, ' ');
 	while (str[i])

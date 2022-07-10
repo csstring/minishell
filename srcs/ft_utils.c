@@ -80,7 +80,7 @@ int ft_taptosp(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
-			i = ft_pass_quot(str, str[i]);
+			i = ft_pass_quot(str, i);
 		if (str[i] == 9 || str[i] == 11)
 			str[i] = 32;
 		i++;
