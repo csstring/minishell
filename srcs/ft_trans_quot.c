@@ -7,6 +7,7 @@ static int	ft_get_size(char c, char *line)
 	i = 0;
 	while (line[i])
 	{
+	
 		if (line[i] == c)
 			return (i);
 		i++;
@@ -58,7 +59,7 @@ char	*ft_trans_quot(char *line)
 			c = line[i++];
 			while (line[i] != c)
 				i++;
-			temp[++k] = (ft_itoa(count++))[0];	
+			temp[++k] = count++;	
 		}
 		else
 			temp[k] = line[i];
@@ -66,6 +67,5 @@ char	*ft_trans_quot(char *line)
 		i++;
 	}
 	temp[k] = line[i];
-//	free(line);
 	return (temp);
 }

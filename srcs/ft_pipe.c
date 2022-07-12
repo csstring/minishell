@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 21:05:12 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/10 15:29:04 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/12 12:33:30 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	ft_pipe(char *line, char **enpv)
 	i = 0;
 	ft_memset(&val, 0 , sizeof(t_pipex));
 	ft_memset(&input, 0, sizeof(t_input));
+	val.line = ft_strdup(line);
 	line = ft_trans_quot(line);
 	input.av = ft_split(line, '|');
 	while (input.av[i])
@@ -54,7 +55,6 @@ int	ft_pipe(char *line, char **enpv)
 	input.ac = i;
 	input.ev = enpv;
 	ft_init(&val, &input);
-	val.line = ft_strdup(line);
 	val.ev = ft_ev_parsing(input.ev);
 	ft_av_parsing(&input, &val);
 	i = 0;
