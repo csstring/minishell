@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 12:09:13 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/10 14:51:43 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/12 17:37:14 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_pipex
 	char	**exe_path;
 	char	*line;
 	char	***trans;
+	pid_t	pid;//
 	int		**fd;
 	int		end;
 	int		check;

@@ -24,9 +24,13 @@ static int	ft_here_doc(char *indirec)
 	int	fd;
 	char	*line;
 	char	*temp;
+	char	*name;
+	static int	count;
 
-	unlink(".Dd!@384jz;lhdaiwmxl128");
-	fd = open(".Dd!@384jz;lhdaiwmxl128", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	count++;
+	name = ft_strjoin(".", ft_itoa(count));
+	unlink(name);
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	while (1)
 	{
 		line = ft_doc_prompt();
@@ -43,7 +47,7 @@ static int	ft_here_doc(char *indirec)
 	close(fd);
 	free(line);
 	free(temp);
-	return (open(".Dd!@384jz;lhdaiwmxl128", O_RDONLY));
+	return (open(name, O_RDONLY));
 }
 
 static int	ft_in_dire_check(char *indirec, int check)
