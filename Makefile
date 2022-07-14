@@ -1,5 +1,5 @@
 
-CFLAGS = -Wall -Wextra -Werror -Iincludes -g 
+CFLAGS = -Wall -Wextra -Werror -Iincludes -g -fsanitize=address
 CC = cc
 
 # brew info readline

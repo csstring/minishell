@@ -27,7 +27,7 @@ void	*ft_echo(t_pipex *val, int i)
 		{
 			check = 1;
 			k++;
-			continue;
+			continue ;
 		}
 		ft_print_echo(val, i, k, check);
 		break ;

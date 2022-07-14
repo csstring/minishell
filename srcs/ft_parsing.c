@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:16 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/12 13:21:28 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/14 13:19:35 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	ft_sep_temp(t_pipex *val, int i)
 	out = 0;
 	etc = 0;
 	while (val->temp[i][k])
-	{
+	{//printf("parsing%s\n", val->temp[i][k]);
 		if (val->temp[i][k][0] == '<')
 		{
 			if (val->temp[i][k++][1] == '<')

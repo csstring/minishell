@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:52:52 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/12 19:21:06 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/14 22:04:25 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	ft_cmd_parent(int i, t_pipex *val, t_input *input)
 	outfile = ft_dire_out(val->outdirec[i]);
 	ft_in_out_close(infile, outfile);
 	ft_error_check(i, input, val);
-//	if (ft_built_check)
-//		return (ft_in_built());
+	if (!ft_strncmp(val->cmd[i][0], "pwd", 4))
+		return ((int)ft_echo(val, i));
 	return (0);
 }
