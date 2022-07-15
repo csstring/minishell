@@ -50,7 +50,7 @@ char	*ft_prompt(void)
 	}
 }
 
-int	main(int ac, char **av, char **enpv)
+int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	struct termios termios;
@@ -67,6 +67,10 @@ int	main(int ac, char **av, char **enpv)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		line = ft_prompt();
+		printf("%s\n", line);
+		line = ft_add_space(line, '>');
+		line = ft_add_space(line, '<');
+		printf("%s\n",line);
 		exit_code = ft_syntax_check(line);
 		if (exit_code)
 		{
@@ -82,18 +86,14 @@ int	main(int ac, char **av, char **enpv)
 			free(line);
 			continue ;
 		}
-		//"",'', $처리
+		//"", '', $처리
 		if (exit_code)
 		{
 			printf("\n%d\n", exit_code);
 			signal(SIGQUIT, SIG_DFL);
 		}
 		else
-		{
-			line = ft_add_space(line, '>');
-			line = ft_add_space(line, '<');
-			exit_code = ft_pipe(line, enpv);
-		}
+			exit_code = ft_pipe(line, envp);
 		signal(SIGINT, sig_handler);
 		free(line);
 //		system("leaks minishell");

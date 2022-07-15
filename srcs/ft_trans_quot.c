@@ -62,7 +62,7 @@ char	*ft_re_trans_quot(char *line, int index)
 			k = i + 1;
 			while (line[k] != line[i])
 				k++;
-			count++;
+			count--;
 			if (index == count)
 				return (ft_re_trans_quot2(&line[i]));
 			i = k;
@@ -80,7 +80,7 @@ char	*ft_trans_quot(char *line)
 	int		k;
 
 	temp = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-	count = 1;
+	count = -1;
 	k = 0;
 	i = 0;
 	while (line[i])
@@ -91,7 +91,7 @@ char	*ft_trans_quot(char *line)
 			c = line[i++];
 			while (line[i] != c)
 				i++;
-			temp[++k] = count++;	
+			temp[++k] = count--;	
 		}
 		else
 			temp[k] = line[i];

@@ -5,6 +5,7 @@ char	*ft_add_space(char *src, char c)
 	int	k;
 	int	i;
 	char	*str;
+	char	temp;
 
 	i = 0;
 	k = 0;
@@ -19,6 +20,13 @@ char	*ft_add_space(char *src, char c)
 	k = 0;
 	while (src[i])
 	{
+		if (src[i] == '\'' || src[i] == '\"')
+		{
+			str[k++] = src[i];
+			temp = src[i++];
+			while (src[i] != temp)
+				str[k++] = src[i++];
+		}
 		str[k] = src[i];
 		if (src[i] == c && src[i+1] != c)
 			str[++k] = ' ';
@@ -91,14 +99,22 @@ int ft_taptosp(char *str)
 			return (0);
 	return (1);
 }
-/*
-int	ft_in_built()
+
+int	ft_in_built(t_pipex *val, t_input *input, int i)
 {
-	if (!ft_strncmp(str, "cd", 3))
-	else if (!ft_strncmp(str, "echo", 5)) 
-	else if (!ft_strncmp(str, "pwd", 4))
-	else if (!ft_strncmp(str, "export", 7))
+	(void)input;
+//	if (!ft_strncmp(str, "cd", 3))
+//		chdir_main( ,&(input->ev), val->cmd[i][1]);
+	if (!ft_strncmp(val->cmd[i][0], "echo", 5))
+		return ((int)ft_echo(val, i));
+	else if (!ft_strncmp(val->cmd[i][0], "pwd", 4))
+		ft_pwd();
+/*	else if (!ft_strncmp(str, "export", 7))
+		return (export( , &(input->ev), val->cmd[i]));
 	else if (!ft_strncmp(str, "unset", 6))
+		return (unset( ,&(input->ev), ));
 	else if (!ft_strncmp(str, "env", 4))
-	else if (!ft_strncmp(str, "exit", 5))
-}*/
+		return (print_env());*/
+	return (0);
+//	else if (!ft_strncmp(str, "exit", 5))
+}

@@ -26,22 +26,30 @@ int	ft_pass_quot(char *line, int i)
 
 static int	ft_quot_check(char *line)
 {
-	int	i;
-	int	single_quot;
-	int	double_quot;
+	int		i;
+	char	c;
+	int		single_quot;
+	int		double_quot;
 
 	single_quot = 0;
 	double_quot = 0;
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '\'')
-			single_quot++;
-		else if (line[i] == '\"')
-			double_quot++;
+		if (line[i] == '\'' || line[i] == '\"')
+		{
+			c = line[i++];
+			while (line[i] != c)
+				if (line[i++] == '\0')
+					return (ft_print_syntax("newline", 258));
+			if (c == '\'')
+				single_quot++;
+			else
+				double_quot++;
+		}
 		i++;
 	}
-	if (single_quot % 2 == 1 || double_quot % 2 == 1)
+	if (single_quot > 125 || double_quot > 125)
 		return (ft_print_syntax("newline", 258));
 	else
 		return (0);
@@ -94,6 +102,7 @@ static int ft_blank_check(char *line, char *c)
 	ft_free2((void *)str);
 	return (0);
 }
+
 int	ft_indirec_syntax_check(char *line)
 {
 	int	i;

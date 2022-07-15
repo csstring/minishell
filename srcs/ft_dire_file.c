@@ -6,51 +6,21 @@ void	ft_error_print(char *str, int no)
 	exit(no);
 }
 
-static char	*ft_doc_prompt(void)
+static int	ft_here_doc(int index, int count)
 {
-	char	*line;
-
-	line = readline("> ");
-	if (line == NULL)
-	{
-		return (line);
-	}
-	else
-		return (line);
-}
-
-static int	ft_here_doc(char *indirec)
-{
-	int	fd;
-	char	*line;
+	int		fd;
 	char	*temp;
 	char	*name;
-	static int	count;
 
-	count++;
-	name = ft_strjoin(".", ft_itoa(count));
-	unlink(name);
-	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	while (1)
-	{
-		line = ft_doc_prompt();
-		if (line == NULL)
-			break ;
-		temp = line;
-		line = ft_strjoin(temp, "\n");
-		if (!ft_strncmp(temp, indirec, ft_strlen(temp) + 1))
-			break ;
-		free(temp);
-		write(fd, line, ft_strlen(line));
-		free(line);
-	}
-	close(fd);
-	free(line);
+	temp = ft_strjoin_free(ft_itoa(index), ft_itoa(count));
+	name = ft_strjoin("...", temp);
 	free(temp);
-	return (open(name, O_RDONLY));
+	fd = open(name, O_RDONLY);
+	free(name);
+	return (fd);
 }
 
-static int	ft_in_dire_check(char *indirec, int check)
+static int	ft_in_dire_check(char *indirec)
 {
 	struct stat	buf;
 	int			i;
@@ -58,38 +28,30 @@ static int	ft_in_dire_check(char *indirec, int check)
 	i = 1;
 	ft_memset(&buf, 0, sizeof(stat));
 	stat(indirec, &buf);
-	if (check == 1)//re
-	{
-		if (buf.st_mode & S_IFDIR)
-			ft_error_print(indirec, 1);
-		else if (!(buf.st_mode & S_IRUSR))
-			ft_error_print(indirec, 1);
-		return (open(indirec, O_RDONLY));
-	}
-	else
-		return (ft_here_doc(indirec));
-	return (-1);
+	if (buf.st_mode & S_IFDIR)
+		ft_error_print(indirec, 1);
+	else if (!(buf.st_mode & S_IRUSR))
+		ft_error_print(indirec, 1);
+	return (open(indirec, O_RDONLY));
 }
 
-int	ft_dire_in(char **indirec)
+int	ft_dire_in(char **indirec, int index)
 {
-	int			i;
-	int			fd;
-	char		*str;
+	int		i;
+	int		fd;
+	int		count;
 
-	str = NULL;
 	i = 0;
+	count = 0;
 	while (indirec[i])
 	{
 		if (!ft_strncmp(indirec[i], "<", 2))
-		{
-			i++;
-			fd = ft_in_dire_check(indirec[i], 1);
-		}
+			fd = ft_in_dire_check(indirec[++i]);
 		else
 		{
 			i++;
-			fd = ft_in_dire_check(indirec[i], 0);
+			fd = ft_here_doc(index, count);
+			count++;
 		}
 		i++;
 		if (!indirec[i])

@@ -6,14 +6,11 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:52:52 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/14 22:04:25 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/15 20:16:43 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-#include <fcntl.h>
-#include "libft.h"
-#include <stdio.h>
 
 static void	ft_in_out_close(int	infile, int outfile)
 {
@@ -36,7 +33,7 @@ void	ft_cmd_end(int i, t_pipex *val, t_input *input)
 
 	close(val->fd[i - 1][P_W]);
 	waitpid(val->pid, NULL, 0);
-	infile = ft_dire_in(val->indirec[i]);
+	infile = ft_dire_in(val->indirec[i], i);
 	outfile = ft_dire_out(val->outdirec[i]);
 	ft_in_out_close(infile, outfile);
 	if (infile == -1)
@@ -56,7 +53,7 @@ void	ft_cmd_mid1(int i, t_pipex *val, t_input *input)
 	close(val->fd[i - 1][P_W]);
 	close(val->fd[i][P_R]);
 	waitpid(val->pid, NULL, 0);
-	infile = ft_dire_in(val->indirec[i]);
+	infile = ft_dire_in(val->indirec[i], i);
 	outfile = ft_dire_out(val->outdirec[i]);
 	ft_in_out_close(infile, outfile);
 	if (infile == -1)
@@ -76,7 +73,7 @@ void	ft_cmd_start(int i, t_pipex *val, t_input *input)
 	int	infile;
 	int	outfile;
 
-	infile = ft_dire_in(val->indirec[i]);
+	infile = ft_dire_in(val->indirec[i], i);
 	outfile = ft_dire_out(val->outdirec[i]);
 	if (input->ac != 1)
 	{
@@ -98,12 +95,18 @@ int	ft_cmd_parent(int i, t_pipex *val, t_input *input)
 {
 	int	infile;
 	int	outfile;
+	int	temp_in;
+	int	temp_out;
+	int	exit_code;
 
-	infile = ft_dire_in(val->indirec[i]);
+	temp_in = dup(STDIN_FILENO);
+	temp_out = dup(STDOUT_FILENO);
+	infile = ft_dire_in(val->indirec[i], i);
 	outfile = ft_dire_out(val->outdirec[i]);
 	ft_in_out_close(infile, outfile);
 	ft_error_check(i, input, val);
-	if (!ft_strncmp(val->cmd[i][0], "pwd", 4))
-		return ((int)ft_echo(val, i));
-	return (0);
+	if (ft_built_check(val->cmd[i][0]))
+		exit_code = ft_in_built(val, input, i);
+	ft_in_out_close(temp_in, temp_out);
+	return (exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 12:09:13 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/12 17:37:14 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/15 19:53:28 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	ft_init(t_pipex *val, t_input *input);
 int		ft_pipe(char *line, char **enpv);
 void	dfl_handler(int sigquit);
 //etc
-int		ft_dire_in(char **cmd);
+int		ft_dire_in(char **indirec, int index);
 int		ft_dire_out(char **outdirec);
 void	ft_error_print(char *str, int no);
 char	*ft_add_space(char *src, char c);
@@ -80,6 +80,7 @@ int		ft_direc_count(char **str, char *c);
 void	ft_tolower_str(char *str);
 int		ft_built_check(char *str);
 int		ft_taptosp(char *line);
+int		ft_in_built(t_pipex *val, t_input *input, int i);
 //syntax
 int		ft_pass_quot(char *line, int i);
 int		ft_syntax_check(char *line);
@@ -94,4 +95,6 @@ void	*ft_pwd(void);
 //trans_quot
 char	*ft_trans_quot(char *line);
 char	*ft_re_trans_quot(char *line, int index);
+//here_doc
+void	ft_make_here_doc(char ***indirec);
 #endif

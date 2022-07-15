@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:22 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/12 19:55:30 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/15 19:51:13 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int	ft_pipex(int ac, t_input *input, t_pipex *val)
 	int		i;
 
 	i = 0;
-//	ft_make_here_doc();
+	ft_make_here_doc(val->indirec);
 	if (ac == 1 && ft_built_check(val->cmd[0][0]))
 		return (ft_cmd_parent(i, val, input));
 	else
@@ -140,7 +140,6 @@ int	ft_pipex(int ac, t_input *input, t_pipex *val)
 			}
 			if (pid == 0)
 				break ;
-//			val->pid = pid;
 			i++;
 		}
 	}
