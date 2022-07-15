@@ -1,10 +1,4 @@
-#include <signal.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <termios.h>
+
 #include "pipex_bonus.h"
 #include "libft.h"
 //ctrl_c 시그널 핸들링
@@ -29,8 +23,7 @@ void	dfl_handler(int sigquit)
 	rl_replace_line("", 1);
 	rl_redisplay();
 }
-//return : 입력한 명령어 한줄
-//prompt 출력
+
 char	*ft_prompt(void)
 {
 	char	*line;
@@ -50,50 +43,45 @@ char	*ft_prompt(void)
 	}
 }
 
-int	main(int ac, char **av, char **envp)
+void	ft_tc(int ac, char **av)
 {
-	char	*line;
 	struct termios termios;
-	int	exit_code;
 
-	(void)ac;
-	(void)av;
     tcgetattr(STDIN_FILENO, &termios);
     termios.c_lflag &= ~ECHOCTL;
     tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+	(void)ac;
+	(void)av;
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	char	*line;
+	int	exit_code;
+
     exit_code = 0;
+    ft_tc(ac, av);
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
 		signal(SIGQUIT, SIG_IGN);
+		printf("exit_code %d\n", exit_code);
 		line = ft_prompt();
-		printf("%s\n", line);
-		line = ft_add_space(line, '>');
-		line = ft_add_space(line, '<');
-		printf("%s\n",line);
-		exit_code = ft_syntax_check(line);
-		if (exit_code)
+		if (ft_syntax_check(&line, &exit_code) || ft_taptosp(line, &exit_code))
 		{
-			signal(SIGQUIT, SIG_DFL);
-			signal(SIGINT, sig_handler);
-			free(line);
-			continue ;
-		}
-		if (ft_taptosp(line))
-		{
-			signal(SIGQUIT, SIG_DFL);
+//			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, sig_handler);
 			free(line);
 			continue ;
 		}
 		//"", '', $처리
-		if (exit_code)
-		{
-			printf("\n%d\n", exit_code);
-			signal(SIGQUIT, SIG_DFL);
-		}
-		else
-			exit_code = ft_pipe(line, envp);
+//		if (exit_code)
+//		{
+//			printf("\n%d\n", exit_code);
+//			signal(SIGQUIT, SIG_DFL);
+//		}
+//		else
+		ft_pipe(line, envp, &exit_code);	
 		signal(SIGINT, sig_handler);
 		free(line);
 //		system("leaks minishell");

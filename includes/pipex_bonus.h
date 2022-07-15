@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 12:09:13 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/15 19:53:28 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/15 20:59:55 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_pipex
 	char	**exe_path;
 	char	*line;
 	char	***trans;
-	pid_t	pid;//
+	pid_t	pid;
 	int		**fd;
 	int		end;
 	int		check;
@@ -69,7 +69,7 @@ void	ft_close_fd(pid_t pid, t_pipex *val, int i);
 int		ft_pipex(int ac, t_input *input, t_pipex *val);
 //main
 void	ft_init(t_pipex *val, t_input *input);
-int		ft_pipe(char *line, char **enpv);
+int		ft_pipe(char *line, char **enpv, int *exit_code);
 void	dfl_handler(int sigquit);
 //etc
 int		ft_dire_in(char **indirec, int index);
@@ -79,11 +79,11 @@ char	*ft_add_space(char *src, char c);
 int		ft_direc_count(char **str, char *c);
 void	ft_tolower_str(char *str);
 int		ft_built_check(char *str);
-int		ft_taptosp(char *line);
+int		ft_taptosp(char *line, int *exit_code);
 int		ft_in_built(t_pipex *val, t_input *input, int i);
 //syntax
 int		ft_pass_quot(char *line, int i);
-int		ft_syntax_check(char *line);
+int		ft_syntax_check(char **line, int *exit_code);
 //free
 void	ft_free2(void **temp);
 void	ft_free3(void ***temp);

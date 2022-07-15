@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 21:05:12 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/15 18:43:47 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/15 21:41:57 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_init(t_pipex *val, t_input *input)
 	val->temp[input->ac] = NULL;
 }
 
-int	ft_pipe(char *line, char **enpv)
+int	ft_pipe(char *line, char **envp, int *exit_code)
 {
 	t_pipex	val;
 	t_input	input;
@@ -53,7 +53,7 @@ int	ft_pipe(char *line, char **enpv)
 	while (input.av[i])
 		i++;
 	input.ac = i;
-	input.ev = enpv;//free 해줘야 할듯
+	input.ev = envp;//free 해줘야 할듯
 	ft_init(&val, &input);
 	val.ev = ft_ev_parsing(input.ev);
 	ft_av_parsing(&input, &val);
@@ -66,7 +66,7 @@ int	ft_pipe(char *line, char **enpv)
 	}
 	if (input.ac != 1)
 		ft_make_pipe(&input, &val);
-	i = ft_pipex(input.ac, &input, &val);
+	*exit_code = ft_pipex(input.ac, &input, &val);
 //	ft_pipe_clear(&val, &input);
-	return (i);
+	return (*exit_code);
 }
