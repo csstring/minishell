@@ -161,13 +161,13 @@ int	ft_outdirec_syntax_check(char *line)
 
 int	ft_syntax_check(char **line, int *exit_code)
 {
-	int	i;
-
-	*line = ft_add_space(*line, '>');
-	*line = ft_add_space(*line, '<');
+//	*line = ft_add_space(*line, '>');
+//	*line = ft_add_space(*line, '<');
 	*exit_code = ft_quot_check(*line);
 	if (*exit_code)
 		return (*exit_code);
+	*line = ft_add_space(*line, '>');
+	*line = ft_add_space(*line, '<');
 	*exit_code = ft_bracket_check(*line);
 	if (*exit_code)
 		return (*exit_code);

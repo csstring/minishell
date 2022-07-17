@@ -67,7 +67,7 @@ int	main(int ac, char **av, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		printf("exit_code %d\n", exit_code);
 		line = ft_prompt();
-		if (ft_syntax_check(&line, &exit_code) || ft_taptosp(line, &exit_code))
+		if (ft_syntax_check(&line, &exit_code) || ft_taptosp(line))
 		{
 //			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, sig_handler);

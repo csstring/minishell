@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:52:52 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/15 20:34:49 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/17 15:40:21 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	ft_cmd_parent(int i, t_pipex *val, t_input *input)
 	infile = ft_dire_in(val->indirec[i], i);
 	outfile = ft_dire_out(val->outdirec[i]);
 	ft_in_out_close(infile, outfile);
-	ft_error_check(i, input, val);
+//	ft_error_check(i, input, val);
 	if (ft_built_check(val->cmd[i][0]))
 		exit_code = ft_in_built(val, input, i);
 	ft_in_out_close(temp_in, temp_out);

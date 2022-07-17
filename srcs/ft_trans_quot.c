@@ -24,7 +24,10 @@ static char	*ft_re_trans_quot2(char *line)
 
 	k = 0;
 	i = 0;
+	printf("%s\n", line);
 	temp = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
+	while (line[i] != '\'' && line[i] != '\"' && line[i] != '\0' && line[i] != ' ')
+				temp[k++] = line[i++];
 	while (line[i])
 	{
 		if (line[i] == '\'' || line[i] == '\"')
@@ -51,12 +54,16 @@ char	*ft_re_trans_quot(char *line, int index)
 	int		count;
 	int		i;
 	int		k;
+	int		j;
 
 	k = 0;
 	i = 0;
+	j = 0;
 	count = 0;
 	while (line[i])
 	{
+		if (line[i] == 32)
+			j = i + 1;
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			k = i + 1;
@@ -64,7 +71,7 @@ char	*ft_re_trans_quot(char *line, int index)
 				k++;
 			count--;
 			if (index == count)
-				return (ft_re_trans_quot2(&line[i]));
+				return (ft_re_trans_quot2(&line[j]));
 			i = k;
 		}
 		i++;

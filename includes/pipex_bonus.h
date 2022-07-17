@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 12:09:13 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/15 20:59:55 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/17 15:41:36 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ft_add_space(char *src, char c);
 int		ft_direc_count(char **str, char *c);
 void	ft_tolower_str(char *str);
 int		ft_built_check(char *str);
-int		ft_taptosp(char *line, int *exit_code);
+int		ft_taptosp(char *line);
 int		ft_in_built(t_pipex *val, t_input *input, int i);
 //syntax
 int		ft_pass_quot(char *line, int i);

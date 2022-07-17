@@ -109,6 +109,9 @@ int	ft_in_built(t_pipex *val, t_input *input, int i)
 		return ((int)ft_echo(val, i));
 	else if (!ft_strncmp(val->cmd[i][0], "pwd", 4))
 		ft_pwd();
+	else if (!ft_strncmp(val->cmd[i][0], "export", 7))
+		printf("%s\n", val->cmd[i][1]);
+
 /*	else if (!ft_strncmp(str, "export", 7))
 		return (export( , &(input->ev), val->cmd[i]));
 	else if (!ft_strncmp(str, "unset", 6))

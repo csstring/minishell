@@ -6,7 +6,7 @@
 /*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:16 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/14 13:19:35 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/17 16:28:16 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,19 @@ int	ft_access_check(char *cmd, t_pipex *val, int check)
 	val->exe_path[check] = NULL;
 	return (0);
 }
+static int	ft_find_symbol(char *str)
+{
+	int	i;
 
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '(')
+			return (str[i + 1]);
+		i++;
+	}
+	return (0);
+}
 void	ft_sep_temp(t_pipex *val, int i)
 {
 	int	k;
@@ -101,9 +113,9 @@ void	ft_sep_temp(t_pipex *val, int i)
 				val->outdirec[i][out++] = ">";
 			val->outdirec[i][out++] = val->temp[i][k];
 		}
-		else if (val->temp[i][k][0] == '(')
+		else if (ft_find_symbol(val->temp[i][k]))
 		{
-			val->cmd[i][etc++] = ft_re_trans_quot(val->line, val->temp[i][k][1]);
+			val->cmd[i][etc++] = ft_re_trans_quot(val->line, ft_find_symbol(val->temp[i][k]));
 			free(val->temp[i][k]);
 		}
 		else
