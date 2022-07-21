@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pipe_utils_bonus.c                              :+:      :+:    :+:   */
+/*   ft_pipe_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: soo <soo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:22 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/15 19:51:13 by schoe            ###   ########.fr       */
+/*   Updated: 2022/07/20 18:42:32 by schoe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
-#include <termios.h>
-void	ft_make_pipe(t_input *input, t_pipex *val)
+#include "minishell.h"
+
+void	ft_make_pipe(t_pipex *val)
 {
 	int	ac_temp;
 	int	i;
 
 	i = 0;
-	ac_temp = input->ac;
-	val->fd = (int **)malloc(sizeof(int *) * ac_temp - 1);
+	ac_temp = val->ac;
+	val->fd = (int **)malloc(sizeof(int *) * ac_temp);
 	if (val->fd == NULL)
-		exit(1);
+		exit(12);
 	while (ac_temp - 1 > 0)
 	{
 		(val->fd)[i] = (int *)malloc(sizeof(int) * 2);
 		if (val->fd[i] == NULL)
-			exit(1);
+			exit(12);
 		if (pipe(val->fd[i]) == -1)
 		{
 			perror("pipe error ");
@@ -38,6 +35,7 @@ void	ft_make_pipe(t_input *input, t_pipex *val)
 		i++;
 		ac_temp--;
 	}
+	val->fd[i] = NULL;
 	val->end = i;
 }
 
@@ -92,57 +90,12 @@ void	ft_close_fd(pid_t pid, t_pipex *val, int i)
 		ft_close_fd2(val, i, end_temp);
 }
 
-static int	ft_pipex2(pid_t pid, t_input *input, t_pipex *val, int i)
+int	ft_exit_sig(int st)
 {
-	int	st;
-	int	k;
-
-	if (pid == 0)
-		signal(SIGQUIT, SIG_DFL);
-	if (input->ac != 1)
-		ft_close_fd(pid, val, i);
-	if (pid == 0 && i == 0)
-		ft_cmd_start(i, val, input);
-	else if (pid == 0 && i == val->end)
-		ft_cmd_end(i, val, input);
-	else if (pid == 0)
-		ft_cmd_mid1(i, val, input);
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid, &st, 0);
-	k = 0;
-	while (k < val->end)
-	{
-		waitpid(0, NULL, 0);
-		k++;
-	}
-	return (st >> 8 & 0x000000ff);
-}
-
-int	ft_pipex(int ac, t_input *input, t_pipex *val)
-{
-	pid_t	pid;
-	int		i;
-
-	i = 0;
-	ft_make_here_doc(val->indirec);
-	if (ac == 1 && ft_built_check(val->cmd[0][0]))
-		return (ft_cmd_parent(i, val, input));
+	if (st >= 256)
+		return (st >> 8 & 0x000000ff);
+	else if (st == 0)
+		return (0);
 	else
-	{
-		while (ac > 0)
-		{
-			ac--;
-			pid = fork();
-			if (pid == -1)
-			{
-				perror("fork error ");
-				exit(1);
-			}
-			if (pid == 0)
-				break ;
-			i++;
-		}
-	}
-	ft_pipex2(pid, input, val, i);
-	return (0);
+		return ((st & 0x000000ff) + 128);
 }

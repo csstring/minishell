@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_check.c                                   :+:      :+:    :+:   */
+/*   ft_error_check_exit.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soo <soo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:53:08 by schoe             #+#    #+#             */
-/*   Updated: 2022/07/21 15:56:53 by soo              ###   ########.fr       */
+/*   Updated: 2022/07/21 15:56:41 by soo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_check_file(int i, t_pipex *val)
+static void	ft_check_file(int i, t_pipex *val)
 {
 	int	j;
 
@@ -21,13 +21,12 @@ static int	ft_check_file(int i, t_pipex *val)
 	{
 		if (val->cmd[i][0][j] == '/')
 		{
-			ft_eprintf("ss_shell: %s: %s\n", val->cmd[i], \
+			ft_eprintf("ss_shell: %s: %s\n", val->cmd[i][0], \
 					strerror(2));
-			return (127);
+			exit(127);
 		}
 		j++;
 	}
-	return (0);
 }
 
 static int	ft_check_dir(int i, t_pipex *val)
@@ -49,26 +48,24 @@ static int	ft_check_dir(int i, t_pipex *val)
 			return (0);
 		j++;
 	}
-	ft_eprintf("ss_shell: %s: %s\n", val->cmd[i], \
+	ft_eprintf("ss_shell: %s: %s\n", val->cmd[i][0], \
 			strerror(21));
-	return (21);
+	exit(21);
 }
 
-int	ft_error_check(int i, t_pipex *val)
+void	ft_error_check_exit(int i, t_pipex *val)
 {
 	if (val->cmd[i][0][0] == 0)
 	{
 		ft_eprintf("ss_shell: : command not found\n");
-		return (127);
+		exit(127);
 	}
 	ft_check_dir(i, val);
 	if (val->exe_path[i][0] == 0)
 	{
-		if (ft_check_file(i, val))
-			return (2);
+		ft_check_file(i, val);
 		ft_eprintf("ss_shell: %s: command not found\n", \
-				val->cmd[i]);
-		return (127);
+				val->cmd[i][0]);
+		exit(127);
 	}
-	return (0);
 }

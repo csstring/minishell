@@ -1,41 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: soo <soo@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/21 14:28:57 by soo               #+#    #+#             */
+/*   Updated: 2022/07/21 15:58:36 by soo              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "pipex_bonus.h"
-#include "libft.h"
-//ctrl_c 시그널 핸들링
-void	sig_handler(int signum)
+#include "minishell.h"
+
+static void	ft_print_quit(void)
 {
-	if (signum != SIGINT)
-		return ;
-	write(STDOUT_FILENO, "\n", 1);
-	if (rl_on_new_line() == -1)
-		exit(1);
-	rl_replace_line("", 1);
-	rl_redisplay();
-}
-void	dfl_handler(int sigquit)
-{
-	write(1,"111",3);
-	if (sigquit != SIGQUIT)
-		return ;
-	write(STDOUT_FILENO, "^\\Quit: 3\n", 10);
-	if (rl_on_new_line() == -1)
-		exit(1);
-	rl_replace_line("", 1);
-	rl_redisplay();
+	if (g_exit == 130)
+		printf("\n");
+	else if (g_exit == 131)
+		printf("Quit: 3\n");
 }
 
 char	*ft_prompt(void)
 {
 	char	*line;
 
+	ft_print_quit();
 	line = readline("ss_shell$ ");
 	if (line == NULL)
 	{
 		printf("\033[1A");
 		printf("\033[10C");
 		printf("exit\n");
-		exit(-1);
+		exit(g_exit);
 	}
+	else if (line[0] == 0)
+		return (line);
 	else
 	{
 		add_history(line);
@@ -43,47 +42,52 @@ char	*ft_prompt(void)
 	}
 }
 
-void	ft_tc(int ac, char **av)
+static void	ft_module(int exit_code, char *line)
 {
-	struct termios termios;
+	g_exit = exit_code;
+	signal(SIGINT, sig_handler);
+	free(line);
+}
 
-    tcgetattr(STDIN_FILENO, &termios);
-    termios.c_lflag &= ~ECHOCTL;
-    tcsetattr(STDIN_FILENO, TCSANOW, &termios);
-	(void)ac;
-	(void)av;
+void	main_loop(t_env *env, char **envp, int exit_code)
+{
+	char	*line;
+
+	while (1)
+	{
+		signal(SIGQUIT, SIG_IGN);
+		line = ft_prompt();
+		exit_code = ft_syntax_check(&line);
+		if (exit_code || ft_taptosp(line))
+		{
+			ft_module(exit_code, line);
+			continue ;
+		}
+		exit_code = g_exit;
+		quote_line(&line, exit_code, env);
+		if (line[0] == 0)
+		{
+			ft_module(exit_code, line);
+			continue ;
+		}
+		ft_pipe(line, &envp, env);
+		signal(SIGINT, sig_handler);
+		free(line);
+	}
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	int	exit_code;
+	t_env	*env;
 
-    exit_code = 0;
-    ft_tc(ac, av);
+	(void)ac;
+	(void)av;
+	g_exit = 0;
+	env = (t_env *)malloc(sizeof(t_env));
+	ft_memset(env, 0, sizeof(t_env));
+	init_env(env, envp);
+	ft_tc();
 	signal(SIGINT, sig_handler);
-	while (1)
-	{
-		signal(SIGQUIT, SIG_IGN);
-		printf("exit_code %d\n", exit_code);
-		line = ft_prompt();
-		if (ft_syntax_check(&line, &exit_code) || ft_taptosp(line))
-		{
-//			signal(SIGQUIT, SIG_DFL);
-			signal(SIGINT, sig_handler);
-			free(line);
-			continue ;
-		}
-		//"", '', $처리
-//		if (exit_code)
-//		{
-//			printf("\n%d\n", exit_code);
-//			signal(SIGQUIT, SIG_DFL);
-//		}
-//		else
-		ft_pipe(line, envp, &exit_code);	
-		signal(SIGINT, sig_handler);
-		free(line);
-//		system("leaks minishell");
-	}
+	main_loop(env, envp, 0);
+	return (g_exit);
 }

@@ -1,21 +1,23 @@
-#include "pipex_bonus.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/19 15:01:51 by schoe             #+#    #+#             */
+/*   Updated: 2022/07/20 20:12:27 by schoe            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-char	*ft_add_space(char *src, char c)
+#include "minishell.h"
+
+static int	ft_add_space2(char *src, char c, char *str)
 {
-	int	k;
-	int	i;
-	char	*str;
+	int		i;
+	int		k;
 	char	temp;
 
-	i = 0;
-	k = 0;
-	while (src[i])
-	{
-		if (src[i] == c)
-			k++;
-		i++;
-	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(src) + k + 1));
 	i = 0;
 	k = 0;
 	while (src[i])
@@ -28,11 +30,29 @@ char	*ft_add_space(char *src, char c)
 				str[k++] = src[i++];
 		}
 		str[k] = src[i];
-		if (src[i] == c && src[i+1] != c)
+		if (src[i] == c && src[i + 1] != c)
 			str[++k] = ' ';
 		k++;
 		i++;
 	}
+	return (k);
+}
+
+char	*ft_add_space(char *src, char c, int i, int k)
+{
+	char	*str;
+
+	while (src[i])
+	{
+		if (src[i] == c)
+			k++;
+		i++;
+	}
+	str = (char *)malloc(sizeof(char) * (ft_strlen(src) + k + 1));
+	if (!str)
+		exit(12);
+	k = 0;
+	k = ft_add_space2(src, c, str);
 	str[k] = '\0';
 	free(src);
 	return (str);
@@ -59,6 +79,8 @@ void	ft_tolower_str(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return ;
 	while (str[i])
 	{
 		if (str[i] >= 'A' && str[i] <= 'Z')
@@ -67,20 +89,7 @@ void	ft_tolower_str(char *str)
 	}
 }
 
-int	ft_built_check(char *str)
-{
-	if (ft_strncmp(str, "cd", 3) && \
-			ft_strncmp(str, "echo", 5) && \
-			ft_strncmp(str, "pwd", 4) && \
-			ft_strncmp(str, "export", 7) && \
-			ft_strncmp(str, "unset", 6) && \
-			ft_strncmp(str, "env", 4) && \
-			ft_strncmp(str, "exit", 5))
-		return (0);
-	return (1);
-}
-
-int ft_taptosp(char *str)
+int	ft_taptosp(char *str)
 {
 	int	i;
 
@@ -98,26 +107,4 @@ int ft_taptosp(char *str)
 		if (str[i++] != 32)
 			return (0);
 	return (1);
-}
-
-int	ft_in_built(t_pipex *val, t_input *input, int i)
-{
-	(void)input;
-//	if (!ft_strncmp(str, "cd", 3))
-//		chdir_main( ,&(input->ev), val->cmd[i][1]);
-	if (!ft_strncmp(val->cmd[i][0], "echo", 5))
-		return ((int)ft_echo(val, i));
-	else if (!ft_strncmp(val->cmd[i][0], "pwd", 4))
-		ft_pwd();
-	else if (!ft_strncmp(val->cmd[i][0], "export", 7))
-		printf("%s\n", val->cmd[i][1]);
-
-/*	else if (!ft_strncmp(str, "export", 7))
-		return (export( , &(input->ev), val->cmd[i]));
-	else if (!ft_strncmp(str, "unset", 6))
-		return (unset( ,&(input->ev), ));
-	else if (!ft_strncmp(str, "env", 4))
-		return (print_env());*/
-	return (0);
-//	else if (!ft_strncmp(str, "exit", 5))
 }

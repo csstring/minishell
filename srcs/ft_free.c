@@ -1,4 +1,16 @@
-#include "pipex_bonus.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schoe <schoe@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/18 12:06:38 by schoe             #+#    #+#             */
+/*   Updated: 2022/07/19 18:27:53 by schoe            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	ft_free3(void ***temp)
 {
@@ -32,15 +44,15 @@ void	ft_free2(void **temp)
 	}
 }
 
-void	ft_pipe_clear(t_pipex *val, t_input *input)
+void	ft_pipe_clear(t_pipex *val)
 {
-	ft_free2((void **)val->exe_path);
-	ft_free2((void **)val->ev);
-	ft_free2((void **)val->fd);
+	ft_free2((void **)val->path);
 	ft_free3((void ***)val->cmd);
 	ft_free3((void ***)val->indirec);
 	ft_free3((void ***)val->outdirec);
-	ft_free2((void **)input->av);
+	ft_free2((void **)val->exe_path);
+	ft_free2((void **)val->fd);
+	ft_free2((void **)val->av);
 	free(val->line);
-//	ft_free3((void ***)val->temp);
+	ft_free3((void ***)val->temp);
 }
